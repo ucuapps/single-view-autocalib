@@ -1,0 +1,3 @@
+[submodule "vgtk"]
+	path = vgtk
+	url = https://github.com/prittjam/vgtk
