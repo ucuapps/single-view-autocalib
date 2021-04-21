@@ -11,7 +11,7 @@ function contours = extract(img, varargin)
                         cfg.low, cfg.high, cfg.alpha);
     
     for i=1:size(contours,2)
-        contours{:,i} = contours{:,i}';
+        contours{:,i} = contours{:,i}'+[1 1];
     end
 
     contours = EDGE.filter(contours, min_contour_length);

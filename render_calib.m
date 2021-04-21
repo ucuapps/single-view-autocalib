@@ -141,6 +141,7 @@ function render = render_calib_model(img, img_path, base_path, sufx, meas, group
                         'vl_min_dist', cfg.vl_min_dist,...
                         'reiterate',cfg.reiterate);
         render.T_rect = T_rect;
+        imwrite(imtile({rimgs{1}{1},rimgs{1}{2},rimgs{2}{1},rimgs{2}{2},rimgs{3}{1},rimgs{3}{2}},'BackgroundColor','w','GridSize',[2,3]), [base_path '_rect' sufx '.jpg'])
     end
 
     if ~isempty(cfg.gt)
