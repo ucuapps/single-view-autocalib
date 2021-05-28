@@ -1,7 +1,7 @@
 function [x,G,rgn_cspond] = get_rgns(img, varargin)
     cfg = struct('read_cache', true, ...
                  'write_cache', true);
-    cfg = cmp_argparse(cfg, varargin{:});
+    [cfg, ~] = cmp_argparse(cfg, varargin{:});
 
     dbpath = fileparts(mfilename('fullpath'));
 
