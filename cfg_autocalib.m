@@ -1,8 +1,14 @@
-function [sampler_cfg, ransac_cfg, lo_cfg] = cfg_autocalib(varargin)
+function [arc_cfg, sampler_cfg, ransac_cfg, lo_cfg] = cfg_autocalib(varargin)
     % Default configurations for auto-calibration
 
     cfg = struct();
 
+    cfg.low = 15;
+    cfg.high = 50;
+    cfg.alpha = 1.5;
+    cfg.min_length = 0.04;
+    cfg.line_tol = 0.0015;
+    cfg.outlierT = 1e5;
     cfg.min_trial_count = 500; % minimum number of RANSAC trials
     cfg.max_trial_count = 500; % maximum number of RANSAC trials
     cfg.max_num_retries = 100; % maximum number of re-sampling per trial
@@ -17,6 +23,14 @@ function [sampler_cfg, ransac_cfg, lo_cfg] = cfg_autocalib(varargin)
     cfg.w_arc = 1; % weights for contours in weighted inlier ratio (currently unavailable)
     cfg.MaxIter = 10; % max number of LO iterations
     cfg = cmp_argparse(cfg, varargin{:});
+
+    arc_cfg = {'low', cfg.low,...
+               'high', cfg.high,...
+               'alpha', cfg.alpha,...
+               'min_length', cfg.min_length,...
+               'line_tol', cfg.line_tol,...
+               'outlierT', cfg.outlierT,...
+    };
 
     sampler_cfg = {'min_trial_count', cfg.min_trial_count,...
                    'max_trial_count', cfg.max_trial_count,...

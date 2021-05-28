@@ -1,10 +1,13 @@
 function is_image_valid = autocalib(img_path, solvers, priors,...
                                     res_dir, img_id, varargin)
     cfg.render = 1;
+    cfg.overwrite = 1;
     cfg.debug = 0;
     cfg.gt = [];
     [cfg, varargin] = cmp_argparse(cfg, varargin{:});
-    [sampler_cfg, ransac_cfg, lo_cfg] = cfg_autocalib(varargin{:});
+    [arc_cfg, sampler_cfg, ransac_cfg, lo_cfg] = cfg_autocalib(varargin{:});
+
+    rng(1);
 
     if nargin < 3 || isempty(priors)
         priors = ones(1,numel(solvers));
@@ -38,16 +41,17 @@ function is_image_valid = autocalib(img_path, solvers, priors,...
         Gc = ones(1,numel(arcs));
     else
         if isunix & ~ismac
-            [rgns,Gapp] = get_rgns(img,'write_cache',1,...
-                                        'read_cache',1);
+            [rgns,Gapp] = get_rgns(img, arc_cfg{:},...
+                                   'write_cache',1,...
+                                   'read_cache',1);
             [arcs,circ,Gc] = get_arcs(img,'write_cache',1,...
                                             'read_cache',1);
         elseif ismac
             display('WARNING: MacOS systems are partially supported. Only arcs and no regions will be extracted.')
             rgns = []; Gapp = [];
-            [arcs, circ, Gc] = get_arcs(img,...
-                                    'write_cache', 0,...
-                                    'read_cache', 0);
+            [arcs, circ, Gc] = get_arcs(img, arc_cfg{:}, ...
+                                       'write_cache', 0,...
+                                       'read_cache', 0);
         else
             error('Linux systems are supported only.')
         end
@@ -57,7 +61,7 @@ function is_image_valid = autocalib(img_path, solvers, priors,...
     img = img.data;
     
     % Filtering if too many circles
-    lengthT = 0.04;
+    lengthT = 0.01;
     valid = cellfun(@(u) size(u,2)>lengthT*max(nx, ny),arcs);
     arcs = arcs(valid);
     circ  = circ(:,valid);
@@ -194,9 +198,11 @@ function is_image_valid = autocalib(img_path, solvers, priors,...
         
         run_id = 1;
         mat_file_path = fullfile(result_path, [img_name '_run' num2str(run_id,'%04d') '.mat']);
-        while exist(mat_file_path)
-            run_id = run_id+1;
-            mat_file_path = fullfile(result_path, [img_name '_run' num2str(run_id,'%04d') '.mat']);
+        if ~cfg.overwrite
+            while exist(mat_file_path)
+                run_id = run_id+1;
+                mat_file_path = fullfile(result_path, [img_name '_run' num2str(run_id,'%04d') '.mat']);
+            end
         end
         display(['>>>> .mat file with results: ', mat_file_path])
         save(mat_file_path, 'model', 'res', 'stats', 'meas', 'groups', 'varinput', 'img_path');
