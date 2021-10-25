@@ -1,14 +1,23 @@
-# Single-View Auto-Calibration from Imaged Scene Lines and Translational Symmetries
+# Minimal Solvers for Single-View Lens-Distorted Camera Auto-Calibration
 
-Implementation of the publication "Minimal Solvers for Single-View Lens-Distorted Camera Auto-Calibration" (WACV 2021, Oral).
+<div align="center">
 
-[[arxiv]](http://arxiv.org/abs/2011.08988)
+[![Paper](https://img.shields.io/badge/arXiv-Preprint-brightgreen)](http://arxiv.org/abs/2011.08988)
+[![Conference](https://img.shields.io/badge/WACV21-Paper-blue)](https://openaccess.thecvf.com/content/WACV2021/html/Lochman_Minimal_Solvers_for_Single-View_Lens-Distorted_Camera_Auto-Calibration_WACV_2021_paper.html)
+[![Poster](https://img.shields.io/badge/WACV21-Poster-purple)](https://ylochman.github.io/sv-autocalib/poster.pdf)
+[![Youtube](https://img.shields.io/badge/WACV21-Presentation-red)](https://ylochman.github.io/sv-autocalib/slides.pdf)
+
+This repository contains the MATLAB implementation of the single-view auto-calibration framework.
+
+<img src="./assets/autocalib_example.jpg" width="1500rem">
+
+</div>
 
 ### Abstract
 
 This paper proposes minimal solvers that use combinations of imaged translational symmetries and parallel scene lines to jointly estimate lens undistortion with either affine rectification or focal length and absolute orientation. We use constraints provided by orthogonal scene planes to recover the focal length. We show that solvers using feature combinations can recover more accurate calibrations than solvers using only one feature type on scenes that have a balance of lines and texture. We also show that the proposed solvers are complementary and can be used together in a RANSAC-based estimator to improve auto-calibration accuracy. State-of-the-art performance is demonstrated on a standard dataset of lens-distorted urban images.
 
-![autocalib_example](./assets/autocalib_example.jpg)
+
 
 If you find our work useful or interesting, please consider citing us:
 ```bibtex
